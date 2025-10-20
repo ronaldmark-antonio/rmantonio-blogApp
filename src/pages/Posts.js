@@ -3,6 +3,7 @@ import AdminView from '../components/AdminView';
 import UserView from '../components/UserView';
 import { useGlobalStore } from '../UserContext';
 
+
 export default function MoviesPage() {
   const { user } = useGlobalStore();
   const [posts, setPosts] = useState([]);
