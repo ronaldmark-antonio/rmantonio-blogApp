@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Table, Button, Modal, Form, Pagination, Container } from 'react-bootstrap';
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
-import logo from '../images/streamflix-logo.png';
+import logo from '../images/blogpad-logo.png';
 
 export default function AdminView() {
   const notyf = useRef(new Notyf()).current;

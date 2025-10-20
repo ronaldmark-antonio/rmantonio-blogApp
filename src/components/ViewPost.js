@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Card, Container, Breadcrumb, Button, ListGroup, Spinner } from 'react-bootstrap';
-import logo from '../images/streamflix-logo.png';
+import logo from '../images/blogpad-logo.png';
 
-export default function ViewMovie() {
+export default function ViewPost() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
@@ -16,14 +16,14 @@ export default function ViewMovie() {
 
       try {
         const res = await fetch(
-          `https://movieapp-api-lms1.onrender.com/movies/getMovie/${id}`,
+          `https://rmantonio-blogapp.onrender.com/posts/getPosts/${id}`,
           { 
             method: 'GET',
             headers: { Authorization: `Bearer ${token}` },
           }
         );
 
-        if (!res.ok) throw new Error('Failed to fetch movie details');
+        if (!res.ok) throw new Error('Failed to fetch post details');
 
           const data = await res.json();
 
@@ -94,14 +94,14 @@ export default function ViewMovie() {
           <Breadcrumb style={{ fontSize: '1rem', marginBottom: 0 }}>
             <Breadcrumb.Item
               linkAs={Link}
-              linkProps={{ to: '/movies' }}
+              linkProps={{ to: '/posts' }}
               className="text-muted"
               style={{
                 fontWeight: 500,
                 textDecoration: 'none',
               }}
             >
-              Movies
+              Posts
             </Breadcrumb.Item>
             <Breadcrumb.Item
               active
@@ -161,10 +161,10 @@ export default function ViewMovie() {
 
             <Button
               variant="danger"
-              onClick={() => navigate('/movies')}
+              onClick={() => navigate('/posts')}
               className="mt-3"
             >
-              &larr; Back to Movies
+              &larr; Back to Posts
             </Button>
           </Card.Body>
         </Card>

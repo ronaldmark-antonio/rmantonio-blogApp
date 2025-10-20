@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
 import UserContext from '../UserContext';
-import logo from '../images/streamflix-logo.png';
+import logo from '../images/blogpad-logo.png';
 
 export default function Login() {
   const notyf = useRef(new Notyf({ duration: 2000, ripple: true })).current;
@@ -114,7 +114,7 @@ export default function Login() {
                 src={logo}
                 alt="StreamFlix Logo"
                 className="img-fluid mb-3"
-                style={{ maxWidth: '250px' }}
+                style={{ maxWidth: '200px' }}
               />
 
               <h2 className="fw-bold mb-4 text-dark">Login</h2>

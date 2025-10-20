@@ -5,10 +5,10 @@ import { useGlobalStore } from '../UserContext';
 
 export default function MoviesPage() {
   const { user } = useGlobalStore();
-  const [movies, setMovies] = useState([]);
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    const fetchMovies = async () => {
+    const fetchPosts = async () => {
 
       if (!user.isLoading) {
 
@@ -34,15 +34,15 @@ export default function MoviesPage() {
 
           const data = await response.json();
 
-          setMovies(data.movies || data);
+          setPosts(data.posts || data);
 
         } catch (error) {
-            console.error('Error fetching movies:', error);
+            console.error('Error fetching posts:', error);
         }
       }
     };
 
-    fetchMovies();
+    fetchPosts();
   }, [user]);
 
   if (user.isLoading) return <p>Loading...</p>;
@@ -50,9 +50,9 @@ export default function MoviesPage() {
   return (
     <div className="container">
       {user.isAdmin ? (
-        <AdminView moviesData={movies} />
+        <AdminView postsData={posts} />
       ) : (
-        <UserView moviesData={movies} />
+        <UserView postsData={posts} />
       )}
     </div>
   );

@@ -8,7 +8,7 @@ import Posts from './pages/Posts';
 import UserProvider from './UserContext';
 import AdminView from './components/AdminView';
 import UserView from './components/UserView';
-import ViewMovie from './components/ViewMovie';
+import ViewPost from './components/ViewPost';
 
 function App() {
 
@@ -127,7 +127,7 @@ function App() {
               }
             />
 
-            <Route path="/post/:id" element={<ViewMovie />} />
+            <Route path="/post/:id" element={<ViewPost />} />
           </Routes>
         </Container>
       </Router>

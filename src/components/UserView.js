@@ -3,7 +3,7 @@ import { Card, Button, Container, Row, Col, Modal, Form } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom';
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
-import logo from '../images/streamflix-logo.png';
+import logo from '../images/blogpad-logo.png';
 
 export default function UserView() {
   const notyf = useRef(new Notyf({ duration: 2000, ripple: true })).current;
@@ -12,20 +12,17 @@ export default function UserView() {
 
   const [showModal, setShowModal] = useState(false);
 
-  // Form state (used for both add & edit)
   const [formPost, setFormPost] = useState({
     title: '',
     content: '',
     author_information: '',
   });
 
-  // Track if editing, and which post ID
   const [editingPostId, setEditingPostId] = useState(null);
 
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
 
-  // Fetch posts from backend
   const fetchPosts = async () => {
     try {
       const res = await fetch('https://rmantonio-blogapp.onrender.com/posts/getPosts', {
@@ -45,14 +42,12 @@ export default function UserView() {
     fetchPosts();
   }, [token]);
 
-  // Open modal for add post
   const handleAddClick = () => {
-    setEditingPostId(null); // Not editing any post
+    setEditingPostId(null);
     setFormPost({ title: '', content: '', author_information: '' });
     setShowModal(true);
   };
 
-  // Open modal for edit post
   const handleEditClick = (post) => {
     setEditingPostId(post._id || post.id);
     setFormPost({
@@ -63,14 +58,12 @@ export default function UserView() {
     setShowModal(true);
   };
 
-  // Close modal
   const handleCloseModal = () => {
     setShowModal(false);
     setEditingPostId(null);
     setFormPost({ title: '', content: '', author_information: '' });
   };
 
-  // Handle form input changes
   const handleChange = (e) => {
     setFormPost({
       ...formPost,
@@ -78,7 +71,6 @@ export default function UserView() {
     });
   };
 
-  // Add new post
   const handleAddPost = async (e) => {
     e.preventDefault();
     try {
@@ -102,7 +94,6 @@ export default function UserView() {
     }
   };
 
-  // Edit existing post
   const handleEditPost = async (e) => {
     e.preventDefault();
     if (!editingPostId) return;
@@ -137,7 +128,6 @@ export default function UserView() {
     }
   };
 
-  // Delete a post
   const handleDeletePost = async (postId) => {
   if (!postId) {
     notyf.error('Invalid post ID.');
@@ -174,21 +164,16 @@ export default function UserView() {
   }
 };
 
-
-
-  // Navigate to detailed post view
   const handleViewPost = (postId) => {
     navigate(`/post/${postId}`);
   };
 
-  // Logout
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     window.location.href = '/login';
   };
 
-  // Format date helper
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString(undefined, {
@@ -207,7 +192,7 @@ export default function UserView() {
           <img src={logo} alt="Blog Logo" style={{ width: '180px', height: 'auto' }} />
           <div>
             <Button
-              variant="danger"
+              variant="dark"
               onClick={handleAddClick}
               className="me-2"
               style={{ borderRadius: '12px', padding: '8px 20px', fontWeight: '600', letterSpacing: '0.05em' }}
@@ -215,7 +200,7 @@ export default function UserView() {
               + Add Post
             </Button>
             <Button
-              variant="dark"
+              variant="outline-dark"
               onClick={handleLogout}
               style={{ borderRadius: '12px', padding: '8px 20px', fontWeight: '600', letterSpacing: '0.05em' }}
             >
@@ -305,10 +290,9 @@ export default function UserView() {
                       </Card.Text>
                     )}
 
-                    {/* Read More button at the bottom */}
                     <div className="mt-auto">
                       <Button
-                        variant="primary"
+                        variant="dark"
                         className="w-100 py-2"
                         onClick={() => handleViewPost(post._id || post.id)}
                       >
@@ -322,7 +306,6 @@ export default function UserView() {
           </Row>
         )}
 
-        {/* Add/Edit Post Modal */}
         <Modal
           show={showModal}
           onHide={handleCloseModal}
@@ -379,10 +362,10 @@ export default function UserView() {
             </Modal.Body>
 
             <Modal.Footer className="border-0 px-4 pb-4">
-              <Button variant="secondary" onClick={handleCloseModal} style={{ borderRadius: '12px' }}>
+              <Button variant="outline-dark" onClick={handleCloseModal} style={{ borderRadius: '12px' }}>
                 Cancel
               </Button>
-              <Button variant="danger" type="submit" style={{ borderRadius: '12px' }}>
+              <Button variant="dark" type="submit" style={{ borderRadius: '12px' }}>
                 {editingPostId ? 'Update' : 'Submit'}
               </Button>
             </Modal.Footer>
