@@ -1,24 +1,4 @@
 {
-<<<<<<< HEAD
-  "name": "activity",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index",
-    "dev": "nodemon index"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.19.1"
-=======
   "name": "blogAppClient",
   "version": "0.1.0",
   "private": true,
@@ -60,6 +40,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
->>>>>>> 4f2ec03853c9a9765d8ba10e0b47f064a0de660e
   }
 }
