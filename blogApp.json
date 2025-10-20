@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-    "url": "https://rmantonio-blogapp.onrender.com",
-=======
     "url": "?",
->>>>>>> 4f2ec03853c9a9765d8ba10e0b47f064a0de660e
     "endpoints": {
         "register": "/register",
         "login": "/login",
