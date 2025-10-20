@@ -269,11 +269,11 @@ export default function UserView() {
                         : 'No content available.'}
                     </Card.Text>
 
-                    <Card.Text className="mb-1 text-muted small">
+                    <Card.Text className="mb-1 text-dark small">
                       <strong>Author:</strong> {post.author_information || 'Anonymous'}
                     </Card.Text>
 
-                    <Card.Text className="mb-1 text-muted small">
+                    <Card.Text className="mb-1 text-dark small">
                       <strong>Date Added:</strong>{' '}
                       {post.creationAdded
                         ? formatDate(post.creationAdded)

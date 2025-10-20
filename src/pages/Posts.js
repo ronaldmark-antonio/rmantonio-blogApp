@@ -4,7 +4,7 @@ import UserView from '../components/UserView';
 import { useGlobalStore } from '../UserContext';
 
     
-export default function MoviesPage() {
+export default function PostsPage() {
   const { user } = useGlobalStore();
   const [posts, setPosts] = useState([]);
 

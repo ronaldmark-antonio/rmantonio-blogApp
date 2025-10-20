@@ -6,18 +6,17 @@ import logo from '../images/blogpad-logo.png';
 export default function ViewPost() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [movie, setMovie] = useState(null);
+  const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-    const fetchMovie = async () => {
-
+    const fetchPost = async () => {
       try {
         const res = await fetch(
-          `https://rmantonio-blogapp.onrender.com/posts/getPosts/${id}`,
-          { 
+          `https://rmantonio-blogapp.onrender.com/posts/getPost/${id}`,
+          {
             method: 'GET',
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -25,19 +24,27 @@ export default function ViewPost() {
 
         if (!res.ok) throw new Error('Failed to fetch post details');
 
-          const data = await res.json();
-
-          setMovie(data);
-
+        const data = await res.json();
+        setPost(data.post || data); // Use data.post if API wraps response
       } catch (err) {
-          setError(err.message);
+        setError(err.message);
       } finally {
-          setLoading(false);
+        setLoading(false);
       }
     };
 
-    fetchMovie();
+    fetchPost();
   }, [id, token]);
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Unknown';
+    const date = new Date(dateString);
+    return date.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  };
 
   if (loading)
     return (
@@ -53,18 +60,18 @@ export default function ViewPost() {
       <Container className="py-5 text-center">
         <h4 className="text-danger">Error:</h4>
         <p>{error}</p>
-        <Button variant="dark" onClick={() => navigate('/movies')}>
-          &larr; Back to Movies
+        <Button variant="dark" onClick={() => navigate('/posts')}>
+          &larr; Back to Posts
         </Button>
       </Container>
     );
 
-  if (!movie)
+  if (!post)
     return (
       <Container className="py-5 text-center">
-        <p>No movie found.</p>
-        <Button variant="dark" onClick={() => navigate('/movies')}>
-          &larr; Back to Movies
+        <p>No post found.</p>
+        <Button variant="dark" onClick={() => navigate('/posts')}>
+          &larr; Back to Posts
         </Button>
       </Container>
     );
@@ -74,11 +81,7 @@ export default function ViewPost() {
       <Container className="py-4" style={{ maxWidth: '800px' }}>
         {/* Header with logo only */}
         <div className="mb-4 d-flex align-items-center">
-          <img
-            src={logo}
-            alt="StreamFlix Logo"
-            style={{ width: '160px', height: 'auto' }}
-          />
+          <img src={logo} alt="BlogPad Logo" style={{ width: '160px', height: 'auto' }} />
         </div>
 
         <div
@@ -86,9 +89,8 @@ export default function ViewPost() {
           style={{
             borderRadius: '12px',
             backgroundColor: '#ffffff',
-            boxShadow:
-              '0 4px 8px rgba(0, 0, 0, 0.15), 0 6px 20px rgba(0, 0, 0, 0.10)',
-              height: '60px'
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15), 0 6px 20px rgba(0, 0, 0, 0.10)',
+            height: '60px',
           }}
         >
           <Breadcrumb style={{ fontSize: '1rem', marginBottom: 0 }}>
@@ -96,21 +98,12 @@ export default function ViewPost() {
               linkAs={Link}
               linkProps={{ to: '/posts' }}
               className="text-muted"
-              style={{
-                fontWeight: 500,
-                textDecoration: 'none',
-              }}
+              style={{ fontWeight: 500, textDecoration: 'none' }}
             >
               Posts
             </Breadcrumb.Item>
-            <Breadcrumb.Item
-              active
-              style={{
-                fontWeight: 600,
-                color: '#000',
-              }}
-            >
-              {movie.title || 'Untitled'}
+            <Breadcrumb.Item active style={{ fontWeight: 600, color: '#000' }}>
+              {post.title || 'Untitled'}
             </Breadcrumb.Item>
           </Breadcrumb>
         </div>
@@ -120,53 +113,47 @@ export default function ViewPost() {
           style={{
             borderRadius: '12px',
             backgroundColor: '#ffffff',
-            boxShadow:
-              '0 4px 8px rgba(0, 0, 0, 0.15), 0 6px 20px rgba(0, 0, 0, 0.10)',
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15), 0 6px 20px rgba(0, 0, 0, 0.10)',
           }}
         >
           <Card.Body>
-            <h2 className="fw-bold mb-3">{movie.title || 'Untitled'}</h2>
+          <h2 className="fw-bold mb-3">{post.title || 'Untitled'}</h2>
 
-            <Card.Text className="text-dark mb-2">
-              <strong>Directed by:</strong> {movie.director || 'Unknown'}
-            </Card.Text>
-            <Card.Text className="text-dark mb-2">
-              <strong>Year:</strong> {movie.year || 'N/A'}
-            </Card.Text>
-            <Card.Text className="text-dark mb-2">
-              <strong>Genre:</strong> {movie.genre || 'N/A'}
-            </Card.Text>
-            <Card.Text className="text-dark mb-3">
-              <strong>Description:</strong>{' '}
-              {movie.description || 'No description available.'}
-            </Card.Text>
+          <Card.Text className="text-dark mb-2">
+          <strong>Author:</strong> {post.author_information || 'Unknown'}
+          </Card.Text>
 
-            {movie.comments && movie.comments.length > 0 && (
-              <div className="mb-3">
-                <strong>Comments:</strong>
-                <ListGroup
-                  variant="flush"
-                  style={{
-                    maxHeight: '150px',
-                    overflowY: 'auto',
-                    marginTop: '8px',
-                  }}
-                >
-                  {movie.comments.map((c) => (
-                    <ListGroup.Item key={c._id}>{c.comment}</ListGroup.Item>
-                  ))}
+          <Card.Text className="text-dark mb-3" style={{ whiteSpace: 'pre-line' }}>
+          <strong>Content:</strong> {post.content || 'No content available.'}
+          </Card.Text>
+
+          <Card.Text className="text-dark mb-3">
+          <strong>Date Added:</strong> {formatDate(post.creationAdded)}
+          </Card.Text>
+
+          {Array.isArray(post.comments) && post.comments.length > 0 && (
+            <div className="mb-3">
+            <strong>Comments:</strong>
+            <ListGroup
+            variant="flush"
+            style={{
+              maxHeight: '150px',
+              overflowY: 'auto',
+              marginTop: '8px',
+              }}
+              >
+              {post.comments.map((c) => (
+                <ListGroup.Item key={c._id}>{c.comment}</ListGroup.Item>
+                ))}
                 </ListGroup>
-              </div>
-            )}
+                </div>
+                )}
 
-            <Button
-              variant="danger"
-              onClick={() => navigate('/posts')}
-              className="mt-3"
-            >
-              &larr; Back to Posts
-            </Button>
-          </Card.Body>
+                <Button variant="dark" onClick={() => navigate('/posts')} className="mt-3">
+                &larr; Back to Posts
+                </Button>
+                </Card.Body>
+
         </Card>
       </Container>
     </div>
