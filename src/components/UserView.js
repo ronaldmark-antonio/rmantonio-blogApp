@@ -85,7 +85,7 @@ export default function UserView() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Failed to add post');
 
-      notyf.success('Post added successfully!');
+      notyf.success('Post Added Successfully!');
       handleCloseModal();
       fetchPosts();
     } catch (err) {
@@ -119,7 +119,7 @@ export default function UserView() {
         throw new Error(errorMessage);
       }
 
-      notyf.success('Post updated successfully!');
+      notyf.success('Post Updated Successfully!');
       handleCloseModal();
       fetchPosts();
     } catch (err) {
@@ -156,7 +156,7 @@ export default function UserView() {
       throw new Error(errorMessage);
     }
 
-    notyf.success('Post deleted successfully!');
+    notyf.success('Post Deleted Successfully!');
     fetchPosts();
   } catch (err) {
     console.error('Error deleting post:', err);

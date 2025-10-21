@@ -3,7 +3,6 @@ import AdminView from '../components/AdminView';
 import UserView from '../components/UserView';
 import { useGlobalStore } from '../UserContext';
 
-    
 export default function PostsPage() {
   const { user } = useGlobalStore();
   const [posts, setPosts] = useState([]);
