@@ -143,7 +143,7 @@ export default function ViewPost() {
 
     setNewComment('');
 
-    notyf.success('Comment added successfully!');
+    notyf.success('Comment Added Successfully!');
 
     try {
       const res = await fetch(
