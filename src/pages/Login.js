@@ -35,36 +35,34 @@ export default function Login() {
       const data = await res.json();
 
       if (res.ok && data.access) {
-
         const token = data.access;
 
         localStorage.setItem('token', token);
-        notyf.success('Login successful!');
+        notyf.success('Login Successful!');
 
         const userData = await retrieveUserDetails(token);
 
         if (userData) {
 
-          setUser(userData);
+            setUser(userData);
 
-          localStorage.setItem('user', JSON.stringify(userData));
+            localStorage.setItem('user', JSON.stringify(userData));
 
-          navigate('/posts');
+            navigate('/posts');
 
         } else {
 
-          notyf.error('Failed to load user details.');
+            notyf.error('Failed to load user details.');
 
         }
 
       } else if (data.message === 'Email and password do not match') {
-          
+
           notyf.error('Incorrect credentials. Try Again.');
 
       } else {
-        
-        notyf.error(data.message || 'User Not Found. Try Again.');
-      
+
+          notyf.error(data.message || 'User Not Found. Try Again.');
       }
 
     } catch (err) {
@@ -77,15 +75,15 @@ export default function Login() {
         setEmail('');
         setPassword('');
         setLoading(false);
-      }
+    }
   };
 
   const retrieveUserDetails = async (token) => {
+
     try {
 
       const res = await fetch('https://rmantonio-blogapp.onrender.com/users/details', {
         headers: { Authorization: `Bearer ${token}` },
-        
       });
 
       const data = await res.json();
@@ -101,7 +99,7 @@ export default function Login() {
       return null;
 
     } catch (err) {
-
+        
         console.error('Failed to retrieve user details:', err);
         
       return null;
@@ -109,15 +107,14 @@ export default function Login() {
   };
 
   return (
-    <Container className="d-flex align-items-center justify-content-center min-vh-100 bg-light">
+    <Container className="d-flex align-items-center justify-content-center min-vh-100 bg-gradient">
       <Row className="w-100 justify-content-center">
         <Col md={6} lg={5}>
-          <Card className="shadow-lg border-0 rounded-1">
+          <Card className="shadow-lg border-0">
             <Card.Body className="p-5 text-center">
-              
               <img
                 src={logo}
-                alt="StreamFlix Logo"
+                alt="BlogPad Logo"
                 className="img-fluid mb-3"
                 style={{ maxWidth: '200px' }}
               />
@@ -126,24 +123,26 @@ export default function Login() {
 
               <Form onSubmit={authenticate}>
                 <Form.Group controlId="userEmail" className="mb-3 text-start">
-                  <Form.Label>Email Address:</Form.Label>
+                  <Form.Label className="fw-semibold">Email Address:</Form.Label>
                   <Form.Control
                     type="email"
                     placeholder="Enter your email address"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    style={{ borderRadius: '0' }}
                   />
                 </Form.Group>
 
                 <Form.Group controlId="password" className="mb-4 text-start">
-                  <Form.Label>Password:</Form.Label>
+                  <Form.Label className="fw-semibold">Password:</Form.Label>
                   <Form.Control
                     type="password"
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    style={{ borderRadius: '0' }}
                   />
                 </Form.Group>
 
@@ -153,7 +152,7 @@ export default function Login() {
                     type="submit"
                     disabled={!isActive || loading}
                     size="lg"
-                    className="rounded-3"
+                    style={{ borderRadius: '0' }} 
                   >
                     {loading ? (
                       <>

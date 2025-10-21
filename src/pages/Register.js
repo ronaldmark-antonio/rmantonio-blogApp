@@ -31,8 +31,7 @@ export default function Register() {
       const data = await res.json();
 
       if (res.ok && data.message === 'Registered Successfully') {
-
-          notyf.success('Registration successful!');
+        notyf.success('Registration Successful!');
 
           setEmail('');
           setPassword('');
@@ -56,100 +55,103 @@ export default function Register() {
         notyf.error('Network error. Please try again.');
 
     } finally {
-
         setLoading(false);
-        
     }
   };
 
   return (
-      <Container className="d-flex align-items-center justify-content-center min-vh-100">
-        <Row className="w-100 justify-content-center">
-          <Col md={6} lg={5}>
-            <Card className="shadow-lg border-0 rounded-1">
-              <Card.Body className="p-5 text-center">
-                
-                <img
-                  src={logo}
-                  alt="StreamFlix Logo"
-                  className="img-fluid mb-3"
-                  style={{ maxWidth: '200px' }}
-                />
+    <Container 
+      className="d-flex align-items-center justify-content-center min-vh-100 bg-gradient" 
+      style={{ maxWidth: '500px', padding: '20px' }}
+    >
+      <Row className="w-100 justify-content-center">
+        <Col md={12}>
+          <Card className="shadow-lg border-0">
+            <Card.Body className="p-5 text-center">
+              <img
+                src={logo}
+                alt="BlogPad Logo"
+                className="img-fluid mb-3"
+                style={{ maxWidth: '200px' }}
+              />
 
-                <h2 className="fw-bold mb-4 text-dark">Register</h2>
+              <h2 className="fw-bold mb-4 text-dark">Register</h2>
 
-                <Form onSubmit={registerUser}>
-                  <Form.Group controlId="userEmail" className="mb-3 text-start">
-                    <Form.Label>Email Address:</Form.Label>
-                    <Form.Control
-                      type="email"
-                      placeholder="Enter your email address"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                    />
-                  </Form.Group>
+              <Form onSubmit={registerUser}>
+                <Form.Group controlId="userEmail" className="mb-3 text-start">
+                  <Form.Label className="fw-semibold">Email Address:</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter your email address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    style={{ borderRadius: '0' }}
+                  />
+                </Form.Group>
 
-                  <Form.Group controlId="password" className="mb-3 text-start">
-                    <Form.Label>Password:</Form.Label>
-                    <Form.Control
-                      type="password"
-                      placeholder="Enter your password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                    />
-                  </Form.Group>
+                <Form.Group controlId="password" className="mb-3 text-start">
+                  <Form.Label className="fw-semibold">Password:</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    style={{ borderRadius: '0' }} 
+                  />
+                </Form.Group>
 
-                  <Form.Group controlId="confirmPassword" className="mb-4 text-start">
-                    <Form.Label>Confirm Password:</Form.Label>
-                    <Form.Control
-                      type="password"
-                      placeholder="Confirm your password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      required
-                    />
-                  </Form.Group>
+                <Form.Group controlId="confirmPassword" className="mb-4 text-start">
+                  <Form.Label className="fw-semibold">Confirm Password:</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Confirm your password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                    style={{ borderRadius: '0' }} 
+                  />
+                </Form.Group>
 
-                  <div className="d-grid">
-                    <Button
-                      variant="dark"
-                      type="submit"
-                      disabled={!isActive || loading}
-                      size="lg"
-                      className="rounded-3"
-                    >
-                      {loading ? (
-                        <>
-                          <Spinner
-                            as="span"
-                            animation="border"
-                            size="sm"
-                            role="status"
-                            aria-hidden="true"
-                          />{' '}
-                          Registering...
-                        </>
-                      ) : (
-                        'Submit'
-                      )}
-                    </Button>
-                  </div>
-                </Form>
-
-                <div className="mt-4">
-                  <p className="mb-0">
-                    Already have an account?{' '}
-                    <a href="/login" className="text-decoration-none fw-semibold text-dark">
-                      Login
-                    </a>
-                  </p>
+                <div className="d-grid">
+                  <Button
+                    variant="dark"
+                    type="submit"
+                    disabled={!isActive || loading}
+                    size="lg"
+                    style={{ borderRadius: '0' }} 
+                  >
+                    {loading ? (
+                      <>
+                        <Spinner
+                          as="span"
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          aria-hidden="true"
+                        />{' '}
+                        Registering...
+                      </>
+                    ) : (
+                      'Submit'
+                    )}
+                  </Button>
                 </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+              </Form>
+
+              <div className="mt-4">
+                <p className="mb-0">
+                  Already have an account?{' '}
+                  <a href="/login" className="text-decoration-none fw-semibold text-dark">
+                    Login
+                  </a>
+                </p>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 }

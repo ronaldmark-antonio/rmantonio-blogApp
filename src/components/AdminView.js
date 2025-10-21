@@ -20,12 +20,15 @@ export default function AdminView() {
 
       if (!res.ok) throw new Error('Failed to fetch posts');
 
-      const data = await res.json();
+        const data = await res.json();
 
-      setPosts(Array.isArray(data.posts) ? data.posts : []);
+        setPosts(Array.isArray(data.posts) ? data.posts : []);
+
     } catch (err) {
-      console.error('Error loading posts:', err);
-      notyf.error('Could not load posts.');
+
+        console.error('Error loading posts:', err);
+
+        notyf.error('Could not load posts.');
     }
   };
 
@@ -35,7 +38,6 @@ export default function AdminView() {
 
   const handleDeletePost = async (postId) => {
     const confirmed = window.confirm('Are you sure you want to delete this post?');
-
     if (!confirmed) return;
 
     try {
@@ -51,7 +53,6 @@ export default function AdminView() {
         fetchPosts();
 
     } catch (err) {
-      
         console.error('Error deleting post:', err);
 
         notyf.error('Could not delete post.');
@@ -89,7 +90,7 @@ export default function AdminView() {
             variant="dark"
             onClick={handleLogout}
             style={{
-              borderRadius: '12px',
+              borderRadius: '0',
               padding: '8px 20px',
               fontWeight: '600',
               letterSpacing: '0.05em',
@@ -107,88 +108,86 @@ export default function AdminView() {
         {currentPosts.length === 0 ? (
           <p className="text-center text-muted">No posts found.</p>
         ) : (
-          <Row xs={1} sm={2} md={3} lg={4} className="g-4">
-            {currentPosts.map((post) => (
-              <Col key={post._id || post.id}>
-                <Card
-                  className="h-100 border-0"
-                  style={{
-                    backgroundColor: '#ffffff',
-                    borderRadius: '12px',
-                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15)',
-                    transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+          <Row xs={1} sm={1} md={3} lg={3} xl={3} className="g-4">
+          {currentPosts.map((post) => (
+            <Col key={post._id || post.id}>
+            <Card
+            className="h-100 border-0"
+            style={{
+              backgroundColor: '#ffffff',
+              borderRadius: '0',
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15), 0 6px 20px rgba(0, 0, 0, 0.10)',
+              transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.03)';
+                e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.25)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.15)';
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.03)';
-                    e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.25)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)';
-                    e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.15)';
-                  }}
-                >
+                  >
                   <Card.Body className="d-flex flex-column p-3">
-                    <div className="d-flex justify-content-end mb-2">
-                      <Button
-                        variant="danger"
-                        size="sm"
-                        onClick={() => handleDeletePost(post._id || post.id)}
-                        style={{ borderRadius: '8px', padding: '4px 10px' }}
-                      >
-                        Delete
-                      </Button>
-                    </div>
+                  <div className="d-flex justify-content-end mb-2 gap-2 pb-3">
+                  <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleDeletePost(post._id || post.id)}
+                  style={{ borderRadius: '0', padding: '4px 10px' }}
+                  >
+                  Delete
+                  </Button>
+                  </div>
 
-                    {/* Post Title */}
-                    <Card.Title className="fs-5 fw-bold text-dark mb-2">
-                      {post.title || 'Untitled'}
-                    </Card.Title>
+                  <Card.Title className="mb-2 fs-5 text-dark fw-bold">
+                  {post.title || 'Untitled'}
+                  </Card.Title>
 
-                    {/* Post Info */}
-                    <Card.Text className="text-dark small mb-1">
-                      <strong>Author:</strong> {post.author_information || 'Anonymous'}
+                  <Card.Text className="mb-1 text-dark small">
+                  <strong>Content:</strong>{' '}
+                  {post.content
+                    ? post.content.length > 100
+                    ? post.content.slice(0, 100) + '...'
+                    : post.content
+                    : 'No content available.'}
                     </Card.Text>
 
-                    <Card.Text className="text-dark small mb-1">
-                      <strong>Created:</strong>{' '}
-                      {post.creationAdded
-                        ? formatDate(post.creationAdded)
-                        : post.createdAt
-                        ? formatDate(post.createdAt)
-                        : post.created_at
-                        ? formatDate(post.created_at)
-                        : 'Unknown'}
+                    <Card.Text className="mb-1 text-dark small">
+                    <strong>Author:</strong> {post.author_information || 'Anonymous'}
                     </Card.Text>
 
-                    <Card.Text className="text-dark small mb-2">
-                      <strong>Content:</strong>{' '}
-                      {post.content
-                        ? post.content.length > 100
-                          ? post.content.slice(0, 100) + '...'
-                          : post.content
-                        : 'No content available.'}
-                    </Card.Text>
+                    <Card.Text className="mb-1 text-dark small">
+                    <strong>Date Added:</strong>{' '}
+                    {post.creationAdded
+                      ? formatDate(post.creationAdded)
+                      : post.createdAt
+                      ? formatDate(post.createdAt)
+                      : post.created_at
+                      ? formatDate(post.created_at)
+                      : 'Unknown'}
+                      </Card.Text>
 
-                    {/* Display the comment count */}
-                    <Card.Text className="text-dark small mb-2">
+                      <Card.Text className="mb-1 text-dark small pb-3">
                       <strong>Comments:</strong> {Array.isArray(post.comments) ? post.comments.length : 0}
-                    </Card.Text>
+                      </Card.Text>
 
-                    <div className="mt-auto">
+                      <div className="mt-auto">
                       <Button
-                        variant="dark"
-                        className="w-100 py-2"
-                        onClick={() => handleViewPost(post._id || post.id)}
-                        style={{ borderRadius: '10px', fontWeight: '600' }}
+                      variant="dark"
+                      className="w-100 py-2"
+                      style={{ borderRadius: '0' }}
+                      onClick={() => handleViewPost(post._id || post.id)}
                       >
-                        Read More
+                      Read More
                       </Button>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
-          </Row>
+                      </div>
+                      </Card.Body>
+                      </Card>
+                      </Col>
+                      ))}
+                      </Row>
+
         )}
       </Container>
     </div>

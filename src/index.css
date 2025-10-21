@@ -12,36 +12,13 @@ code {
     monospace;
 }
 
-.pagination .page-item .page-link {
-  background-color: #dc3545 !important;
-  color: #fff !important;
-  border: none !important;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+.no-radius-modal .modal-content {
+  border-radius: 0 !important; 
 }
 
-.pagination .page-item .page-link:hover {
-  background-color: #b71c1c !important;
-  color: #fff !important;
-  transform: scale(1.05);
+.no-radius-modal .modal-header,
+.no-radius-modal .modal-footer {
+  border-radius: 0 !important; 
 }
 
-.pagination .page-item.active .page-link {
-  background-color: #ff0000 !important;
-  color: #fff !important;
-  box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
-  transform: scale(1.1);
-}
-
-.pagination .page-item.disabled .page-link {
-  background-color: #8b0000 !important;
-  color: #bbb !important;
-}
-
-.breadcrumb-item + .breadcrumb-item::before {
-  content: '>';
-  padding: 0 0.5rem;
-  color: #6c757d;
-}
 

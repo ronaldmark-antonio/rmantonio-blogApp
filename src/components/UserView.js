@@ -9,19 +9,15 @@ export default function UserView() {
   const notyf = useRef(new Notyf({ duration: 2000, ripple: true })).current;
 
   const [posts, setPosts] = useState([]);
-
   const [showModal, setShowModal] = useState(false);
-
   const [formPost, setFormPost] = useState({
     title: '',
     content: '',
     author_information: '',
   });
-
   const [editingPostId, setEditingPostId] = useState(null);
-
+  
   const token = localStorage.getItem('token');
-
   const navigate = useNavigate();
 
   const fetchPosts = async () => {
@@ -30,7 +26,9 @@ export default function UserView() {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` },
       });
+
       const data = await res.json();
+
       if (!res.ok) throw new Error(data.message || 'Failed to fetch posts');
 
         setPosts(Array.isArray(data.posts) ? data.posts : []);
@@ -40,6 +38,7 @@ export default function UserView() {
         console.error('Error loading posts:', err);
 
         alert('Could not load posts.');
+
     }
   };
 
@@ -78,7 +77,6 @@ export default function UserView() {
 
   const handleAddPost = async (e) => {
     e.preventDefault();
-
     try {
       const res = await fetch('https://rmantonio-blogapp.onrender.com/posts/addPost', {
         method: 'POST',
@@ -88,7 +86,9 @@ export default function UserView() {
         },
         body: JSON.stringify(formPost),
       });
+
       const data = await res.json();
+
       if (!res.ok) throw new Error(data.message || 'Failed to add post');
 
         notyf.success('Post Added Successfully!');
@@ -107,9 +107,7 @@ export default function UserView() {
 
   const handleEditPost = async (e) => {
     e.preventDefault();
-
     if (!editingPostId) return;
-
     try {
       const res = await fetch(`https://rmantonio-blogapp.onrender.com/posts/updatePost/${editingPostId}`, {
         method: 'PATCH',
@@ -121,21 +119,24 @@ export default function UserView() {
       });
 
       if (!res.ok) {
+
         let errorMessage = 'Failed to update post';
 
         try {
+
           const errorData = await res.json();
+
           errorMessage = errorData.message || errorMessage;
-        } catch {
-          // Ignore JSON parse errors
-        }
+
+        } catch {}
         throw new Error(errorMessage);
       }
 
       notyf.success('Post Updated Successfully!');
 
-        handleCloseModal();
-        fetchPosts();
+      handleCloseModal();
+
+      fetchPosts();
 
     } catch (err) {
 
@@ -147,9 +148,7 @@ export default function UserView() {
 
   const handleDeletePost = async (postId) => {
     if (!postId) {
-      
       notyf.error('Invalid post ID.');
-      
       return;
     }
 
@@ -165,24 +164,28 @@ export default function UserView() {
       });
 
       if (!res.ok) {
+
         let errorMessage = 'Failed to delete post';
+
         try {
+
           const errorData = await res.json();
+
           errorMessage = errorData.message || errorMessage;
-        } catch {
-          // ignore JSON parse error
-        }
+
+        } catch {}
+
         throw new Error(errorMessage);
       }
+      
+      notyf.success('Post Deleted Successfully!');
 
-        notyf.success('Post Deleted Successfully!');
-
-        fetchPosts();
+      fetchPosts();
 
     } catch (err) {
-
+      
         console.error('Error deleting post:', err);
-        
+
         notyf.error(err.message || 'Could not delete post.');
     }
   };
@@ -218,14 +221,14 @@ export default function UserView() {
               variant="dark"
               onClick={handleAddClick}
               className="me-2"
-              style={{ borderRadius: '12px', padding: '8px 20px', fontWeight: '600', letterSpacing: '0.05em' }}
+              style={{ borderRadius: '0', padding: '10px 20px', fontWeight: '600', letterSpacing: '0.05em' }}
             >
               + Add Post
             </Button>
             <Button
               variant="outline-dark"
               onClick={handleLogout}
-              style={{ borderRadius: '12px', padding: '8px 20px', fontWeight: '600', letterSpacing: '0.05em' }}
+              style={{ borderRadius: '0', padding: '10px 20px', fontWeight: '600', letterSpacing: '0.05em' }}
             >
               Logout
             </Button>
@@ -233,21 +236,21 @@ export default function UserView() {
         </div>
 
         <div className="text-center mb-5">
-          <h1 className="fw-bold text-dark">Welcome to the Blog 📝</h1>
+          <h1 className="fw-bold text-dark">Welcome to the BlogPad</h1>
           <p className="text-muted fs-5">Explore thoughts, ideas, and stories shared by users.</p>
         </div>
 
         {currentPosts.length === 0 ? (
           <p className="text-center text-muted">No posts found.</p>
         ) : (
-          <Row xs={1} sm={2} md={3} lg={4} className="g-4">
+          <Row xs={1} sm={2} md={3} lg={3} className="g-4">
             {currentPosts.map((post) => (
               <Col key={post._id || post.id}>
                 <Card
                   className="h-100 border-0"
                   style={{
                     backgroundColor: '#ffffff',
-                    borderRadius: '12px',
+                    borderRadius: '0',
                     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15), 0 6px 20px rgba(0, 0, 0, 0.10)',
                     transition: 'transform 0.25s ease, box-shadow 0.25s ease',
                   }}
@@ -261,13 +264,12 @@ export default function UserView() {
                   }}
                 >
                   <Card.Body className="d-flex flex-column p-3">
-                    {/* Buttons container before title */}
-                    <div className="d-flex justify-content-end mb-2 gap-2">
+                    <div className="d-flex justify-content-end mb-2 gap-2 pb-3">
                       <Button
                         variant="warning"
                         size="sm"
                         onClick={() => handleEditClick(post)}
-                        style={{ borderRadius: '8px', padding: '4px 10px' }}
+                        style={{ borderRadius: '0', padding: '4px 10px' }}
                       >
                         Edit
                       </Button>
@@ -275,7 +277,7 @@ export default function UserView() {
                         variant="danger"
                         size="sm"
                         onClick={() => handleDeletePost(post._id || post.id)}
-                        style={{ borderRadius: '8px', padding: '4px 10px' }}
+                        style={{ borderRadius: '0', padding: '4px 10px' }}
                       >
                         Delete
                       </Button>
@@ -307,8 +309,7 @@ export default function UserView() {
                         : 'Unknown'}
                     </Card.Text>
 
-                    {/* Always display comment count */}
-                    <Card.Text className="mb-1 text-dark small">
+                    <Card.Text className="mb-1 text-dark small pb-3">
                       <strong>Comments:</strong> {Array.isArray(post.comments) ? post.comments.length : 0}
                     </Card.Text>
 
@@ -316,6 +317,7 @@ export default function UserView() {
                       <Button
                         variant="dark"
                         className="w-100 py-2"
+                        style={{ borderRadius: '0' }}
                         onClick={() => handleViewPost(post._id || post.id)}
                       >
                         Read More
@@ -328,48 +330,58 @@ export default function UserView() {
           </Row>
         )}
 
-        <Modal show={showModal} onHide={handleCloseModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>{editingPostId ? 'Edit Post' : 'Add Post'}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form onSubmit={editingPostId ? handleEditPost : handleAddPost}>
-              <Form.Group className="mb-3">
-                <Form.Label>Title</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="title"
-                  value={formPost.title}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Content</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  name="content"
-                  value={formPost.content}
-                  onChange={handleChange}
-                  rows={4}
-                  required
-                />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Author Information</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="author_information"
-                  value={formPost.author_information}
-                  onChange={handleChange}
-                />
-              </Form.Group>
-              <Button type="submit" variant="dark" className="w-100">
-                {editingPostId ? 'Save Changes' : 'Add Post'}
-              </Button>
-            </Form>
-          </Modal.Body>
-        </Modal>
+      <Modal show={showModal} onHide={handleCloseModal} dialogClassName="no-radius-modal">
+        <Modal.Header closeButton>
+          <Modal.Title>{editingPostId ? 'Edit Post' : 'Add Post'}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={editingPostId ? handleEditPost : handleAddPost}>
+            <Form.Group className="mb-3">
+              <Form.Label>Title</Form.Label>
+              <Form.Control
+                type="text"
+                name="title"
+                value={formPost.title}
+                onChange={handleChange}
+                required
+                style={{ borderRadius: '0' }}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Content</Form.Label>
+              <Form.Control
+                as="textarea"
+                name="content"
+                value={formPost.content}
+                onChange={handleChange}
+                rows={4}
+                required
+                style={{ borderRadius: '0' }}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Author Information</Form.Label>
+              <Form.Control
+                type="text"
+                name="author_information"
+                value={formPost.author_information}
+                onChange={handleChange}
+                style={{ borderRadius: '0' }}
+              />
+            </Form.Group>
+            <Button
+              type="submit"
+              variant="dark"
+              className="w-100"
+              style={{ borderRadius: '0' }}
+            >
+              {editingPostId ? 'Save Changes' : 'Submit'}
+            </Button>
+          </Form>
+        </Modal.Body>
+      </Modal>
+
+
       </Container>
     </div>
   );
