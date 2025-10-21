@@ -102,7 +102,6 @@ export default function UserView() {
         console.error('Error adding post:', err);
 
         notyf.error('Could not add post.');
-
     }
   };
 
@@ -125,9 +124,7 @@ export default function UserView() {
         let errorMessage = 'Failed to update post';
 
         try {
-
           const errorData = await res.json();
-
           errorMessage = errorData.message || errorMessage;
         } catch {
           // Ignore JSON parse errors
@@ -135,10 +132,9 @@ export default function UserView() {
         throw new Error(errorMessage);
       }
 
-        notyf.success('Post Updated Successfully!');
+      notyf.success('Post Updated Successfully!');
 
         handleCloseModal();
-
         fetchPosts();
 
     } catch (err) {
@@ -150,45 +146,46 @@ export default function UserView() {
   };
 
   const handleDeletePost = async (postId) => {
-  if (!postId) {
-    notyf.error('Invalid post ID.');
-
-    return;
-  }
-
-  const confirmed = window.confirm('Are you sure you want to delete this post?');
-  if (!confirmed) return;
-
-  try {
-    const res = await fetch(`https://rmantonio-blogapp.onrender.com/posts/deletePost/${postId}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!res.ok) {
-      let errorMessage = 'Failed to delete post';
-      try {
-        const errorData = await res.json();
-        errorMessage = errorData.message || errorMessage;
-      } catch {
-        // ignore JSON parse error
-      }
-      throw new Error(errorMessage);
+    if (!postId) {
+      
+      notyf.error('Invalid post ID.');
+      
+      return;
     }
 
-      notyf.success('Post Deleted Successfully!');
+    const confirmed = window.confirm('Are you sure you want to delete this post?');
+    if (!confirmed) return;
 
-      fetchPosts();
+    try {
+      const res = await fetch(`https://rmantonio-blogapp.onrender.com/posts/deletePost/${postId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-  } catch (err) {
-    
-      console.error('Error deleting post:', err);
+      if (!res.ok) {
+        let errorMessage = 'Failed to delete post';
+        try {
+          const errorData = await res.json();
+          errorMessage = errorData.message || errorMessage;
+        } catch {
+          // ignore JSON parse error
+        }
+        throw new Error(errorMessage);
+      }
 
-      notyf.error(err.message || 'Could not delete post.');
-  }
-};
+        notyf.success('Post Deleted Successfully!');
+
+        fetchPosts();
+
+    } catch (err) {
+
+        console.error('Error deleting post:', err);
+        
+        notyf.error(err.message || 'Could not delete post.');
+    }
+  };
 
   const handleViewPost = (postId) => {
     navigate(`/post/${postId}`);
@@ -310,11 +307,10 @@ export default function UserView() {
                         : 'Unknown'}
                     </Card.Text>
 
-                    {Array.isArray(post.comments) && post.comments.length > 0 && (
-                      <Card.Text className="mb-1 text-muted small">
-                        <strong>Comments:</strong> {post.comments.length}
-                      </Card.Text>
-                    )}
+                    {/* Always display comment count */}
+                    <Card.Text className="mb-1 text-dark small">
+                      <strong>Comments:</strong> {Array.isArray(post.comments) ? post.comments.length : 0}
+                    </Card.Text>
 
                     <div className="mt-auto">
                       <Button
@@ -332,70 +328,47 @@ export default function UserView() {
           </Row>
         )}
 
-        <Modal
-          show={showModal}
-          onHide={handleCloseModal}
-          centered
-          backdrop="static"
-          keyboard={false}
-          contentClassName="rounded-4 shadow-sm border-0"
-        >
-          <Modal.Header closeButton className="border-0 pb-2">
-            <Modal.Title className="fw-bold fs-4">{editingPostId ? 'Edit Post' : 'Add New Post'}</Modal.Title>
+        <Modal show={showModal} onHide={handleCloseModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>{editingPostId ? 'Edit Post' : 'Add Post'}</Modal.Title>
           </Modal.Header>
-
-          <Form onSubmit={editingPostId ? handleEditPost : handleAddPost}>
-            <Modal.Body className="px-4 pt-0">
-              <Form.Group className="mb-3" controlId="formTitle">
-                <Form.Label className="fw-semibold">Title</Form.Label>
+          <Modal.Body>
+            <Form onSubmit={editingPostId ? handleEditPost : handleAddPost}>
+              <Form.Group className="mb-3">
+                <Form.Label>Title</Form.Label>
                 <Form.Control
                   type="text"
                   name="title"
                   value={formPost.title}
                   onChange={handleChange}
                   required
-                  placeholder="Enter post title"
-                  style={{ borderRadius: '12px', borderColor: '#ddd', padding: '10px 15px' }}
                 />
               </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formContent">
-                <Form.Label className="fw-semibold">Content</Form.Label>
+              <Form.Group className="mb-3">
+                <Form.Label>Content</Form.Label>
                 <Form.Control
                   as="textarea"
-                  rows={4}
                   name="content"
                   value={formPost.content}
                   onChange={handleChange}
+                  rows={4}
                   required
-                  placeholder="Write your blog content here..."
-                  style={{ borderRadius: '12px', borderColor: '#ddd', padding: '10px 15px', resize: 'vertical' }}
                 />
               </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formAuthor">
-                <Form.Label className="fw-semibold">Author</Form.Label>
+              <Form.Group className="mb-3">
+                <Form.Label>Author Information</Form.Label>
                 <Form.Control
                   type="text"
                   name="author_information"
                   value={formPost.author_information}
                   onChange={handleChange}
-                  required
-                  placeholder="Enter author name"
-                  style={{ borderRadius: '12px', borderColor: '#ddd', padding: '10px 15px' }}
                 />
               </Form.Group>
-            </Modal.Body>
-
-            <Modal.Footer className="border-0 px-4 pb-4">
-              <Button variant="outline-dark" onClick={handleCloseModal} style={{ borderRadius: '12px' }}>
-                Cancel
+              <Button type="submit" variant="dark" className="w-100">
+                {editingPostId ? 'Save Changes' : 'Add Post'}
               </Button>
-              <Button variant="dark" type="submit" style={{ borderRadius: '12px' }}>
-                {editingPostId ? 'Update' : 'Submit'}
-              </Button>
-            </Modal.Footer>
-          </Form>
+            </Form>
+          </Modal.Body>
         </Modal>
       </Container>
     </div>

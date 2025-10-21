@@ -13,7 +13,6 @@ export default function AdminView() {
 
   const fetchPosts = async () => {
     try {
-
       const res = await fetch('https://rmantonio-blogapp.onrender.com/posts/getPosts', {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` },
@@ -21,15 +20,12 @@ export default function AdminView() {
 
       if (!res.ok) throw new Error('Failed to fetch posts');
 
-        const data = await res.json();
+      const data = await res.json();
 
-        setPosts(Array.isArray(data.posts) ? data.posts : []);
-
+      setPosts(Array.isArray(data.posts) ? data.posts : []);
     } catch (err) {
-
-        console.error('Error loading posts:', err);
-
-        notyf.error('Could not load posts.');
+      console.error('Error loading posts:', err);
+      notyf.error('Could not load posts.');
     }
   };
 
@@ -38,7 +34,6 @@ export default function AdminView() {
   }, [token]);
 
   const handleDeletePost = async (postId) => {
-
     const confirmed = window.confirm('Are you sure you want to delete this post?');
 
     if (!confirmed) return;
@@ -56,7 +51,7 @@ export default function AdminView() {
         fetchPosts();
 
     } catch (err) {
-
+      
         console.error('Error deleting post:', err);
 
         notyf.error('Could not delete post.');
@@ -75,13 +70,12 @@ export default function AdminView() {
 
   const formatDate = (dateString) => {
     if (!dateString) return 'Unknown';
-      const date = new Date(dateString);
-
-      return date.toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      });
+    const date = new Date(dateString);
+    return date.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
   };
 
   const currentPosts = [...posts].reverse();
@@ -175,11 +169,10 @@ export default function AdminView() {
                         : 'No content available.'}
                     </Card.Text>
 
-                    {Array.isArray(post.comments) && post.comments.length > 0 && (
-                      <Card.Text className="text-muted small mb-2">
-                        <strong>Comments:</strong> {post.comments.length}
-                      </Card.Text>
-                    )}
+                    {/* Display the comment count */}
+                    <Card.Text className="text-dark small mb-2">
+                      <strong>Comments:</strong> {Array.isArray(post.comments) ? post.comments.length : 0}
+                    </Card.Text>
 
                     <div className="mt-auto">
                       <Button
