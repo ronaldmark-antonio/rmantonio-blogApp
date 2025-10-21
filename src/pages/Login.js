@@ -22,6 +22,7 @@ export default function Login() {
     setLoading(true);
 
     try {
+
       localStorage.removeItem('token');
       localStorage.removeItem('user');
 
@@ -34,6 +35,7 @@ export default function Login() {
       const data = await res.json();
 
       if (res.ok && data.access) {
+
         const token = data.access;
 
         localStorage.setItem('token', token);
@@ -42,6 +44,7 @@ export default function Login() {
         const userData = await retrieveUserDetails(token);
 
         if (userData) {
+
           setUser(userData);
 
           localStorage.setItem('user', JSON.stringify(userData));
@@ -79,8 +82,10 @@ export default function Login() {
 
   const retrieveUserDetails = async (token) => {
     try {
+
       const res = await fetch('https://rmantonio-blogapp.onrender.com/users/details', {
         headers: { Authorization: `Bearer ${token}` },
+        
       });
 
       const data = await res.json();

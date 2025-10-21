@@ -21,6 +21,7 @@ export default function UserView() {
   const [editingPostId, setEditingPostId] = useState(null);
 
   const token = localStorage.getItem('token');
+
   const navigate = useNavigate();
 
   const fetchPosts = async () => {
@@ -31,10 +32,14 @@ export default function UserView() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Failed to fetch posts');
-      setPosts(Array.isArray(data.posts) ? data.posts : []);
+
+        setPosts(Array.isArray(data.posts) ? data.posts : []);
+
     } catch (err) {
-      console.error('Error loading posts:', err);
-      alert('Could not load posts.');
+
+        console.error('Error loading posts:', err);
+
+        alert('Could not load posts.');
     }
   };
 
@@ -73,6 +78,7 @@ export default function UserView() {
 
   const handleAddPost = async (e) => {
     e.preventDefault();
+
     try {
       const res = await fetch('https://rmantonio-blogapp.onrender.com/posts/addPost', {
         method: 'POST',
@@ -85,17 +91,24 @@ export default function UserView() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Failed to add post');
 
-      notyf.success('Post Added Successfully!');
-      handleCloseModal();
-      fetchPosts();
+        notyf.success('Post Added Successfully!');
+
+        handleCloseModal();
+
+        fetchPosts();
+
     } catch (err) {
-      console.error('Error adding post:', err);
-      notyf.error('Could not add post.');
+
+        console.error('Error adding post:', err);
+
+        notyf.error('Could not add post.');
+
     }
   };
 
   const handleEditPost = async (e) => {
     e.preventDefault();
+
     if (!editingPostId) return;
 
     try {
@@ -110,8 +123,11 @@ export default function UserView() {
 
       if (!res.ok) {
         let errorMessage = 'Failed to update post';
+
         try {
+
           const errorData = await res.json();
+
           errorMessage = errorData.message || errorMessage;
         } catch {
           // Ignore JSON parse errors
@@ -119,18 +135,24 @@ export default function UserView() {
         throw new Error(errorMessage);
       }
 
-      notyf.success('Post Updated Successfully!');
-      handleCloseModal();
-      fetchPosts();
+        notyf.success('Post Updated Successfully!');
+
+        handleCloseModal();
+
+        fetchPosts();
+
     } catch (err) {
-      console.error('Error updating post:', err);
-      notyf.error('Could not update post.');
+
+        console.error('Error updating post:', err);
+
+        notyf.error('Could not update post.');
     }
   };
 
   const handleDeletePost = async (postId) => {
   if (!postId) {
     notyf.error('Invalid post ID.');
+
     return;
   }
 
@@ -156,11 +178,15 @@ export default function UserView() {
       throw new Error(errorMessage);
     }
 
-    notyf.success('Post Deleted Successfully!');
-    fetchPosts();
+      notyf.success('Post Deleted Successfully!');
+
+      fetchPosts();
+
   } catch (err) {
-    console.error('Error deleting post:', err);
-    notyf.error(err.message || 'Could not delete post.');
+    
+      console.error('Error deleting post:', err);
+
+      notyf.error(err.message || 'Could not delete post.');
   }
 };
 

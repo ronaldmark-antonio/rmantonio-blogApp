@@ -25,11 +25,13 @@ export default function ViewPost() {
         if (!res.ok) throw new Error('Failed to fetch post details');
 
         const data = await res.json();
-        setPost(data.post || data); // Use data.post if API wraps response
+
+          setPost(data.post || data);
+          
       } catch (err) {
-        setError(err.message);
+          setError(err.message);
       } finally {
-        setLoading(false);
+          setLoading(false);
       }
     };
 

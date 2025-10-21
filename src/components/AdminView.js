@@ -13,17 +13,23 @@ export default function AdminView() {
 
   const fetchPosts = async () => {
     try {
+
       const res = await fetch('https://rmantonio-blogapp.onrender.com/posts/getPosts', {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!res.ok) throw new Error('Failed to fetch posts');
-      const data = await res.json();
-      setPosts(Array.isArray(data.posts) ? data.posts : []);
+
+        const data = await res.json();
+
+        setPosts(Array.isArray(data.posts) ? data.posts : []);
+
     } catch (err) {
-      console.error('Error loading posts:', err);
-      notyf.error('Could not load posts.');
+
+        console.error('Error loading posts:', err);
+
+        notyf.error('Could not load posts.');
     }
   };
 
@@ -32,7 +38,9 @@ export default function AdminView() {
   }, [token]);
 
   const handleDeletePost = async (postId) => {
+
     const confirmed = window.confirm('Are you sure you want to delete this post?');
+
     if (!confirmed) return;
 
     try {
@@ -42,11 +50,16 @@ export default function AdminView() {
       });
 
       if (!res.ok) throw new Error('Failed to delete post');
-      notyf.success('Post Deleted Successfully!');
-      fetchPosts();
+
+        notyf.success('Post Deleted Successfully!');
+
+        fetchPosts();
+
     } catch (err) {
-      console.error('Error deleting post:', err);
-      notyf.error('Could not delete post.');
+
+        console.error('Error deleting post:', err);
+
+        notyf.error('Could not delete post.');
     }
   };
 
@@ -62,12 +75,13 @@ export default function AdminView() {
 
   const formatDate = (dateString) => {
     if (!dateString) return 'Unknown';
-    const date = new Date(dateString);
-    return date.toLocaleDateString(undefined, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
+      const date = new Date(dateString);
+
+      return date.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
   };
 
   const currentPosts = [...posts].reverse();
@@ -75,7 +89,6 @@ export default function AdminView() {
   return (
     <div style={{ backgroundColor: '#ffffff', minHeight: '100vh' }}>
       <Container className="py-4">
-        {/* Header */}
         <div className="d-flex justify-content-between align-items-center mb-4">
           <img src={logo} alt="BlogPad Logo" style={{ width: '180px', height: 'auto' }} />
           <Button
