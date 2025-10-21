@@ -15,9 +15,10 @@ export default function ViewPost() {
   const [isAdmin, setIsAdmin] = useState(false);
   const token = localStorage.getItem('token');
 
+  // Change position to bottom-right here:
   const notyf = new Notyf({
     duration: 3000,
-    position: { x: 'right', y: 'top' },
+    position: { x: 'right', y: 'bottom' },  // <-- updated from 'top' to 'bottom'
     ripple: true,
   });
 
@@ -31,17 +32,17 @@ export default function ViewPost() {
       const payload = token.split('.')[1];
       const decodedPayload = JSON.parse(atob(payload));
 
-        console.log("Decoded Payload:", decodedPayload);
+      console.log("Decoded Payload:", decodedPayload);
 
-        setIsAdmin(!!decodedPayload.isAdmin);
+      setIsAdmin(!!decodedPayload.isAdmin);
 
-        console.log('Is admin:', !!decodedPayload.isAdmin);
+      console.log('Is admin:', !!decodedPayload.isAdmin);
 
     } catch (error) {
 
-        console.error('Error decoding token:', error);
+      console.error('Error decoding token:', error);
 
-        setIsAdmin(false);
+      setIsAdmin(false);
     }
   }, [token]);
 
@@ -103,13 +104,13 @@ export default function ViewPost() {
         comments: prevPost.comments.filter(comment => comment._id !== commentId),
       }));
 
-        notyf.success('Comment Deleted Successfully!');
+      notyf.success('Comment Deleted Successfully!');
 
     } catch (err) {
 
-        console.error('Error during comment deletion:', err);
+      console.error('Error during comment deletion:', err);
 
-        notyf.error('Failed to delete comment.');
+      notyf.error('Failed to delete comment.');
     }
   };
 
