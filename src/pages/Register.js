@@ -14,6 +14,9 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+const [showPassword, setShowPassword] = useState(false);
+const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const isActive = email !== '' && password !== '' && confirmPassword !== '' && password === confirmPassword;
 
   const registerUser = async (e) => {
@@ -92,26 +95,44 @@ export default function Register() {
 
                 <Form.Group controlId="password" className="mb-3 text-start">
                   <Form.Label className="fw-semibold">Password:</Form.Label>
-                  <Form.Control
-                    type="password"
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    style={{ borderRadius: '0' }} 
-                  />
+                  <div className="d-flex">
+                    <Form.Control
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Enter your password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      style={{ borderRadius: '0' }}
+                    />
+                    <Button
+                      variant="outline-secondary"
+                      onClick={() => setShowPassword(!showPassword)}
+                      style={{ borderRadius: '0' }}
+                    >
+                      {showPassword ? '🙈' : '👁️'}
+                    </Button>
+                  </div>
                 </Form.Group>
 
                 <Form.Group controlId="confirmPassword" className="mb-4 text-start">
                   <Form.Label className="fw-semibold">Confirm Password:</Form.Label>
-                  <Form.Control
-                    type="password"
-                    placeholder="Confirm your password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    style={{ borderRadius: '0' }} 
-                  />
+                  <div className="d-flex">
+                    <Form.Control
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      placeholder="Confirm your password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                      style={{ borderRadius: '0' }}
+                    />
+                    <Button
+                      variant="outline-secondary"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      style={{ borderRadius: '0' }}
+                    >
+                      {showConfirmPassword ? '🙈' : '👁️'}
+                    </Button>
+                  </div>
                 </Form.Group>
 
                 <div className="d-grid">
