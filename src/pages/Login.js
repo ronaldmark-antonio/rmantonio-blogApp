@@ -15,6 +15,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const isActive = email !== '' && password !== '';
+  const [showPassword, setShowPassword] = useState(false);
 
   const authenticate = async (e) => {
     e.preventDefault();
@@ -134,16 +135,25 @@ export default function Login() {
                   />
                 </Form.Group>
 
-                <Form.Group controlId="password" className="mb-4 text-start">
+                <Form.Group controlId="password" className="mb-3 text-start">
                   <Form.Label className="fw-semibold">Password:</Form.Label>
-                  <Form.Control
-                    type="password"
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    style={{ borderRadius: '0' }}
-                  />
+                  <div className="d-flex">
+                    <Form.Control
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Enter your password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      style={{ borderRadius: '0' }}
+                    />
+                    <Button
+                      variant="outline-secondary"
+                      onClick={() => setShowPassword(!showPassword)}
+                      style={{ borderRadius: '0' }}
+                    >
+                      {showPassword ? '🙈' : '👁️'}
+                    </Button>
+                  </div>
                 </Form.Group>
 
                 <div className="d-grid">
