@@ -33,8 +33,8 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
       const data = await res.json();
 
-      if (res.ok && data.message === 'Registered Successfully') {
-        notyf.success('Registration Successful!');
+      if (res.ok && data.message === 'Registered successfully') {
+        notyf.success('Registration successful');
 
           setEmail('');
           setPassword('');
@@ -48,14 +48,14 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
       } else {
 
-          notyf.error(data.message || 'Registration failed. Please try again.');
+          notyf.error(data.message || 'Registration failed. Please try again');
 
       }
     } catch (err) {
 
         console.error(err);
 
-        notyf.error('Network error. Please try again.');
+        notyf.error('Network error. Please try again');
 
     } finally {
         setLoading(false);

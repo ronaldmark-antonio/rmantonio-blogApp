@@ -106,7 +106,7 @@ export default function ViewPost() {
         comments: prevPost.comments.filter(comment => comment._id !== commentId),
       }));
 
-        notyf.success('Comment Deleted Successfully!');
+        notyf.success('Comment deleted successfully');
 
     } catch (err) {
 
@@ -143,7 +143,7 @@ export default function ViewPost() {
 
     setNewComment('');
 
-    notyf.success('Comment Added Successfully!');
+    notyf.success('Comment added successfully');
 
     try {
       const res = await fetch(

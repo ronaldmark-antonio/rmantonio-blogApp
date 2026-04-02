@@ -39,7 +39,7 @@ export default function Login() {
         const token = data.access;
 
         localStorage.setItem('token', token);
-        notyf.success('Login Successful!');
+        notyf.success('Login successful');
 
         const userData = await retrieveUserDetails(token);
 
@@ -59,18 +59,18 @@ export default function Login() {
 
       } else if (data.message === 'Email and password do not match') {
 
-          notyf.error('Incorrect credentials. Try Again.');
+          notyf.error('Incorrect credentials. Try Again');
 
       } else {
 
-          notyf.error(data.message || 'User Not Found. Try Again.');
+          notyf.error(data.message || 'User not found. Try Again');
       }
 
     } catch (err) {
 
         console.error(err);
 
-        notyf.error('Network error. Please try again.');
+        notyf.error('Network error. Please try again');
 
     } finally {
         setEmail('');
