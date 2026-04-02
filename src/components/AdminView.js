@@ -28,7 +28,7 @@ export default function AdminView() {
 
         console.error('Error loading posts:', err);
 
-        notyf.error('Could not load posts.');
+        notyf.error('Could not load posts');
     }
   };
 
@@ -48,14 +48,14 @@ export default function AdminView() {
 
       if (!res.ok) throw new Error('Failed to delete post');
 
-        notyf.success('Post Deleted Successfully!');
+        notyf.success('Post deleted successfully');
 
         fetchPosts();
 
     } catch (err) {
         console.error('Error deleting post:', err);
 
-        notyf.error('Could not delete post.');
+        notyf.error('Could not delete post');
     }
   };
 
