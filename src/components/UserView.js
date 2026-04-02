@@ -75,6 +75,11 @@ export default function UserView() {
     });
   };
 
+  const isFormValid =
+    formPost.title.trim() !== '' &&
+    formPost.content.trim() !== '' &&
+    formPost.author_information.trim() !== '';
+
   const handleAddPost = async (e) => {
     e.preventDefault();
     try {
@@ -373,7 +378,12 @@ export default function UserView() {
               type="submit"
               variant="dark"
               className="w-100"
-              style={{ borderRadius: '0' }}
+              disabled={!isFormValid}
+              style={{
+                borderRadius: '0',
+                opacity: isFormValid ? 1 : 0.5,
+                cursor: isFormValid ? 'pointer' : 'not-allowed'
+              }}
             >
               {editingPostId ? 'Save Changes' : 'Submit'}
             </Button>
