@@ -130,100 +130,60 @@ export default function AdminView() {
                   >
                   <Card.Body className="d-flex flex-column p-3">
                   <div className="d-flex justify-content-end mb-2 gap-2 pb-3">
-                  <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={() => handleDeletePost(post._id || post.id)}
-                  style={{ borderRadius: '0', padding: '4px 10px' }}
-                  >
-                  Delete
-                  </Button>
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      onClick={() => handleDeletePost(post._id || post.id)}
+                      style={{ borderRadius: '0', padding: '4px 10px' }}
+                    >
+                      Delete
+                    </Button>
                   </div>
 
                   <Card.Title className="mb-2 fs-5 text-dark fw-bold">
-                  {post.title || 'Untitled'}
+                    {post.title || 'Untitled'}
                   </Card.Title>
 
                   <Card.Text className="mb-1 text-dark small">
-                  <strong>Content:</strong>{' '}
-                  {post.content
-                    ? post.content.length > 100
-                    ? post.content.slice(0, 100) + '...'
-                    : post.content
-                    : 'No content available.'}
-                    </Card.Text>
+                    <strong>Content:</strong>{' '}
+                    {post.content
+                      ? post.content.length > 100
+                        ? post.content.slice(0, 100) + '...'
+                        : post.content
+                      : 'No content available.'}
+                  </Card.Text>
 
-                    <Card.Text className="mb-1 text-dark small">
+                  <Card.Text className="mb-1 text-dark small">
                     <strong>Author:</strong> {post.author_information || 'Anonymous'}
-                    </Card.Text>
+                  </Card.Text>
 
-                    <Card.Text className="mb-1 text-dark small pb-3">
-                      <strong>Comments:</strong>
+                  {/* Added right after Author */}
+                  <Card.Text className="mb-1 text-dark small">
+                    <strong>Date added:</strong>{' '}
+                    {post.creationAdded
+                      ? formatDate(post.creationAdded)
+                      : post.createdAt
+                      ? formatDate(post.createdAt)
+                      : post.created_at
+                      ? formatDate(post.created_at)
+                      : 'Unknown'}
+                  </Card.Text>
 
-                      {Array.isArray(post.comments) && post.comments.length > 0 ? (
-                        post.comments
-                          .slice()
-                          .sort((a, b) => {
-                            const getTime = (item) =>
-                              item.createdAt
-                                ? new Date(item.createdAt).getTime()
-                                : item._id
-                                ? parseInt(item._id.substring(0, 8), 16) * 1000
-                                : 0;
+                  <Card.Text className="mb-1 text-dark small pb-3">
+                    <strong>Comments:</strong> {Array.isArray(post.comments) ? post.comments.length : 0}
+                  </Card.Text>
 
-                            return getTime(b) - getTime(a); // newest first
-                          })
-                          .slice(0, 2) // top 2 comments
-                          .map((c, index) => {
-                            const date =
-                              c.createdAt
-                                ? new Date(c.createdAt)
-                                : c._id
-                                ? new Date(parseInt(c._id.substring(0, 8), 16) * 1000)
-                                : null;
-
-                            return (
-                              <div
-                                key={index}
-                                style={{
-                                  marginTop: '4px',
-                                  display: 'flex',
-                                  justifyContent: 'space-between',
-                                  alignItems: 'center',
-                                }}
-                              >
-                                <span>• {c.comment || 'No content'}</span>
-                                <span
-                                  className="text-muted"
-                                  style={{ fontSize: '0.75rem', whiteSpace: 'nowrap' }}
-                                >
-                                  {date
-                                    ? date.toLocaleDateString(undefined, {
-                                        year: 'numeric',
-                                        month: 'short',
-                                        day: 'numeric',
-                                      })
-                                    : 'No date'}
-                                </span>
-                              </div>
-                            );
-                          })
-                      ) : (
-                        <div className="text-muted">No comments yet.</div>
-                      )}
-                    </Card.Text>
-
-                      <div className="mt-auto">
-                      <Button
+                  <div className="mt-auto">
+                    <Button
                       variant="dark"
                       className="w-100 py-2"
                       style={{ borderRadius: '0' }}
                       onClick={() => handleViewPost(post._id || post.id)}
-                      >
+                    >
                       Read More
-                      </Button>
-                      </div>
-                      </Card.Body>
+                    </Button>
+                  </div>
+                </Card.Body>
                       </Card>
                       </Col>
                       ))}
