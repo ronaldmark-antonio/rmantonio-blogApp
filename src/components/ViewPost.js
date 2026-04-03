@@ -274,34 +274,43 @@ export default function ViewPost() {
             <div className="mb-3">
               <strong>Comments:</strong>
                 {comments.length > 0 ? (
-                  <ListGroup
-                    variant="flush"
-                    style={{
-                      maxHeight: '300px',
-                      overflowY: 'auto',
-                      marginTop: '8px',
-                    }}
-                  >
-                    {comments
-                      .slice() // shallow copy
-                      .sort((a, b) => {
-                        // Use createdAt if available, else fallback to timestamp from _id
-                        const timeA = a.createdAt
-                          ? new Date(a.createdAt).getTime()
-                          : parseInt(a._id?.substring(0, 8), 16) * 1000;
-                        const timeB = b.createdAt
-                          ? new Date(b.createdAt).getTime()
-                          : parseInt(b._id?.substring(0, 8), 16) * 1000;
-                        return timeB - timeA; // newest first
-                      })
-                      .slice(0, 2) // only latest 2 comments
-                      .map((c, index) => (
+                <ListGroup
+                  variant="flush"
+                  style={{
+                    maxHeight: '300px',
+                    overflowY: 'auto',
+                    marginTop: '8px',
+                  }}
+                >
+                  {comments
+                    .slice()
+                    .sort((a, b) => {
+                      const timeA = a.createdAt
+                        ? new Date(a.createdAt).getTime()
+                        : parseInt(a._id?.substring(0, 8), 16) * 1000;
+                      const timeB = b.createdAt
+                        ? new Date(b.createdAt).getTime()
+                        : parseInt(b._id?.substring(0, 8), 16) * 1000;
+                      return timeB - timeA; // newest first
+                    })
+                    .map((c, index) => {
+                      const commentDate = c.createdAt
+                        ? new Date(c.createdAt)
+                        : new Date(parseInt(c._id?.substring(0, 8), 16) * 1000);
+
+                      return (
                         <ListGroup.Item key={c._id || index}>
-                          {c?.comment || 'No content available'}
+                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <span>{c?.comment || 'No content available'}</span>
+                            <small className="text-muted">
+                              {commentDate.toLocaleString()}
+                            </small>
+                          </div>
+
                           {isAdmin && (
                             <Button
                               variant="danger"
-                              className="ms-2 float-end"
+                              className="ms-2 float-end mt-2"
                               style={{ borderRadius: '0' }}
                               onClick={() => handleDeleteComment(c._id)}
                             >
@@ -309,8 +318,9 @@ export default function ViewPost() {
                             </Button>
                           )}
                         </ListGroup.Item>
-                      ))}
-                  </ListGroup>
+                      );
+                    })}
+                </ListGroup>
                 ) : (
                   <p className="text-muted">No comments yet.</p>
                 )}
