@@ -330,13 +330,36 @@ export default function UserView() {
                       <strong>Comments:</strong>
                       {Array.isArray(post.comments) && post.comments.length > 0 ? (
                         post.comments
-                          .slice(-2) // get last 2 comments
-                          .reverse() // show newest first
-                          .map((c, index) => (
-                            <div key={index} style={{ marginTop: '4px' }}>
-                              • {c.comment || 'No content'}
-                            </div>
-                          ))
+                          .slice(-2) // last 2 comments
+                          .reverse() // newest first
+                          .map((c, index) => {
+                            // Try multiple fields for the comment date
+                            const rawDate = c.createdAt || c.creationAdded || c.date || (c._id ? c._id : null);
+
+                            // If _id is used (MongoDB ObjectId), extract the timestamp
+                            const commentDate = rawDate
+                              ? rawDate.length === 24 && /^[0-9a-fA-F]+$/.test(rawDate)
+                                ? new Date(parseInt(rawDate.substring(0, 8), 16) * 1000)
+                                : new Date(rawDate)
+                              : null;
+
+                            const formattedDate = commentDate
+                              ? commentDate.toLocaleString(undefined, {
+                                  year: 'numeric',
+                                  month: 'short',
+                                  day: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                })
+                              : 'Unknown';
+
+                            return (
+                              <div key={index} style={{ marginTop: '4px', display: 'flex', justifyContent: 'space-between' }}>
+                                <span>• {c.comment || 'No content'}</span>
+                                <span style={{ color: '#888', fontSize: '0.75rem', marginLeft: '8px' }}>{formattedDate}</span>
+                              </div>
+                            );
+                          })
                       ) : (
                         <div className="text-muted">No comments yet.</div>
                       )}
