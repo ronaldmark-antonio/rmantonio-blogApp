@@ -273,34 +273,47 @@ export default function ViewPost() {
 
             <div className="mb-3">
               <strong>Comments:</strong>
-              {comments.length > 0 ? (
-                <ListGroup
-                  variant="flush"
-                  style={{
-                    maxHeight: '300px',
-                    overflowY: 'auto',
-                    marginTop: '8px',
-                  }}
-                >
-                  {comments.map((c, index) => (
-                    <ListGroup.Item key={c._id || index}>
-                      {c?.comment || 'No content available'}
-                      {isAdmin && (
-                        <Button
-                          variant="danger"
-                          className="ms-2 float-end"
-                          style={{ borderRadius: '0' }} 
-                          onClick={() => handleDeleteComment(c._id)}
-                        >
-                          Delete
-                        </Button>
-                      )}
-                    </ListGroup.Item>
-                  ))}
-                </ListGroup>
-              ) : (
-                <p className="text-muted">No comments yet.</p>
-              )}
+                {comments.length > 0 ? (
+                  <ListGroup
+                    variant="flush"
+                    style={{
+                      maxHeight: '300px',
+                      overflowY: 'auto',
+                      marginTop: '8px',
+                    }}
+                  >
+                    {comments
+                      .slice() // shallow copy
+                      .sort((a, b) => {
+                        // Use createdAt if available, else fallback to timestamp from _id
+                        const timeA = a.createdAt
+                          ? new Date(a.createdAt).getTime()
+                          : parseInt(a._id?.substring(0, 8), 16) * 1000;
+                        const timeB = b.createdAt
+                          ? new Date(b.createdAt).getTime()
+                          : parseInt(b._id?.substring(0, 8), 16) * 1000;
+                        return timeB - timeA; // newest first
+                      })
+                      .slice(0, 2) // only latest 2 comments
+                      .map((c, index) => (
+                        <ListGroup.Item key={c._id || index}>
+                          {c?.comment || 'No content available'}
+                          {isAdmin && (
+                            <Button
+                              variant="danger"
+                              className="ms-2 float-end"
+                              style={{ borderRadius: '0' }}
+                              onClick={() => handleDeleteComment(c._id)}
+                            >
+                              Delete
+                            </Button>
+                          )}
+                        </ListGroup.Item>
+                      ))}
+                  </ListGroup>
+                ) : (
+                  <p className="text-muted">No comments yet.</p>
+                )}
             </div>
 
             {!isAdmin && (
