@@ -15,7 +15,9 @@ export default function UserView() {
     content: '',
     author_information: '',
   });
+
   const [editingPostId, setEditingPostId] = useState(null);
+  const [originalPost, setOriginalPost] = useState(null);
   
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
@@ -53,12 +55,15 @@ export default function UserView() {
   };
 
   const handleEditClick = (post) => {
-    setEditingPostId(post._id || post.id);
-    setFormPost({
+    const formattedPost = {
       title: post.title || '',
       content: post.content || '',
       author_information: post.author_information || '',
-    });
+    };
+
+    setEditingPostId(post._id || post.id);
+    setFormPost(formattedPost);
+    setOriginalPost(formattedPost); // REQUIRED
     setShowModal(true);
   };
 
@@ -66,6 +71,7 @@ export default function UserView() {
     setShowModal(false);
     setEditingPostId(null);
     setFormPost({ title: '', content: '', author_information: '' });
+    setOriginalPost(null);
   };
 
   const handleChange = (e) => {
@@ -79,6 +85,12 @@ export default function UserView() {
     formPost.title.trim() !== '' &&
     formPost.content.trim() !== '' &&
     formPost.author_information.trim() !== '';
+
+  const hasChanges =
+    originalPost &&
+    (formPost.title !== originalPost.title ||
+      formPost.content !== originalPost.content ||
+      formPost.author_information !== originalPost.author_information);
 
   const handleAddPost = async (e) => {
     e.preventDefault();
@@ -96,7 +108,7 @@ export default function UserView() {
 
       if (!res.ok) throw new Error(data.message || 'Failed to add post');
 
-        notyf.success('Post Added Successfully!');
+        notyf.success('Post added successfully');
 
         handleCloseModal();
 
@@ -137,7 +149,7 @@ export default function UserView() {
         throw new Error(errorMessage);
       }
 
-      notyf.success('Post Updated Successfully!');
+      notyf.success('Post updated successfully');
 
       handleCloseModal();
 
@@ -378,14 +390,18 @@ export default function UserView() {
               type="submit"
               variant="dark"
               className="w-100"
-              disabled={!isFormValid}
+              disabled={editingPostId ? (!isFormValid || !hasChanges) : !isFormValid}
               style={{
                 borderRadius: '0',
-                opacity: isFormValid ? 1 : 0.5,
-                cursor: isFormValid ? 'pointer' : 'not-allowed'
+                opacity: editingPostId
+                  ? (isFormValid && hasChanges ? 1 : 0.5)
+                  : (isFormValid ? 1 : 0.5),
+                cursor: editingPostId
+                  ? (isFormValid && hasChanges ? 'pointer' : 'not-allowed')
+                  : (isFormValid ? 'pointer' : 'not-allowed')
               }}
             >
-              {editingPostId ? 'Save Changes' : 'Submit'}
+              {editingPostId ? 'Save changes' : 'Submit'}
             </Button>
           </Form>
         </Modal.Body>
