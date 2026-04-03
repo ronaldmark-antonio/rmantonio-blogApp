@@ -327,7 +327,19 @@ export default function UserView() {
                     </Card.Text>
 
                     <Card.Text className="mb-1 text-dark small pb-3">
-                      <strong>Comments:</strong> {Array.isArray(post.comments) ? post.comments.length : 0}
+                      <strong>Comments:</strong>
+                      {Array.isArray(post.comments) && post.comments.length > 0 ? (
+                        post.comments
+                          .slice(-2) // get last 2 comments
+                          .reverse() // show newest first
+                          .map((c, index) => (
+                            <div key={index} style={{ marginTop: '4px' }}>
+                              • {c.comment || 'No content'}
+                            </div>
+                          ))
+                      ) : (
+                        <div className="text-muted">No comments yet.</div>
+                      )}
                     </Card.Text>
 
                     <div className="mt-auto">
