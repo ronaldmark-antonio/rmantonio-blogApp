@@ -118,7 +118,7 @@ export default function UserView() {
 
         console.error('Error adding post:', err);
 
-        notyf.error('Could not add post.');
+        notyf.error('Title already exists');
     }
   };
 
@@ -159,7 +159,7 @@ export default function UserView() {
 
         console.error('Error updating post:', err);
 
-        notyf.error('Could not update post.');
+        notyf.error('Title already exists');
     }
   };
 
@@ -337,7 +337,7 @@ export default function UserView() {
                         style={{ borderRadius: '0' }}
                         onClick={() => handleViewPost(post._id || post.id)}
                       >
-                        Read More
+                        Read more
                       </Button>
                     </div>
                   </Card.Body>
