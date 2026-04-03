@@ -261,7 +261,7 @@ export default function ViewPost() {
             </Card.Text>
 
             <Card.Text className="text-dark mb-3">
-              <strong>Date Added:</strong>{' '}
+              <strong>Date added:</strong>{' '}
               {post.creationAdded
                 ? new Date(post.creationAdded).toLocaleDateString(undefined, {
                     year: 'numeric',

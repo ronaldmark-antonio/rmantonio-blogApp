@@ -157,20 +157,61 @@ export default function AdminView() {
                     <strong>Author:</strong> {post.author_information || 'Anonymous'}
                     </Card.Text>
 
-                    <Card.Text className="mb-1 text-dark small">
-                    <strong>Date Added:</strong>{' '}
-                    {post.creationAdded
-                      ? formatDate(post.creationAdded)
-                      : post.createdAt
-                      ? formatDate(post.createdAt)
-                      : post.created_at
-                      ? formatDate(post.created_at)
-                      : 'Unknown'}
-                      </Card.Text>
+                    <Card.Text className="mb-1 text-dark small pb-3">
+                      <strong>Comments:</strong>
 
-                      <Card.Text className="mb-1 text-dark small pb-3">
-                      <strong>Comments:</strong> {Array.isArray(post.comments) ? post.comments.length : 0}
-                      </Card.Text>
+                      {Array.isArray(post.comments) && post.comments.length > 0 ? (
+                        post.comments
+                          .slice()
+                          .sort((a, b) => {
+                            const getTime = (item) =>
+                              item.createdAt
+                                ? new Date(item.createdAt).getTime()
+                                : item._id
+                                ? parseInt(item._id.substring(0, 8), 16) * 1000
+                                : 0;
+
+                            return getTime(b) - getTime(a); // newest first
+                          })
+                          .slice(0, 2) // top 2 comments
+                          .map((c, index) => {
+                            const date =
+                              c.createdAt
+                                ? new Date(c.createdAt)
+                                : c._id
+                                ? new Date(parseInt(c._id.substring(0, 8), 16) * 1000)
+                                : null;
+
+                            return (
+                              <div
+                                key={index}
+                                style={{
+                                  marginTop: '4px',
+                                  display: 'flex',
+                                  justifyContent: 'space-between',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                <span>• {c.comment || 'No content'}</span>
+                                <span
+                                  className="text-muted"
+                                  style={{ fontSize: '0.75rem', whiteSpace: 'nowrap' }}
+                                >
+                                  {date
+                                    ? date.toLocaleDateString(undefined, {
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: 'numeric',
+                                      })
+                                    : 'No date'}
+                                </span>
+                              </div>
+                            );
+                          })
+                      ) : (
+                        <div className="text-muted">No comments yet.</div>
+                      )}
+                    </Card.Text>
 
                       <div className="mt-auto">
                       <Button

@@ -240,7 +240,7 @@ export default function UserView() {
               className="me-2"
               style={{ borderRadius: '0', padding: '10px 20px', fontWeight: '600', letterSpacing: '0.05em' }}
             >
-              + Add Post
+              Add post
             </Button>
             <Button
               variant="outline-dark"
@@ -316,7 +316,7 @@ export default function UserView() {
                     </Card.Text>
 
                     <Card.Text className="mb-1 text-dark small">
-                      <strong>Date Added:</strong>{' '}
+                      <strong>Date added:</strong>{' '}
                       {post.creationAdded
                         ? formatDate(post.creationAdded)
                         : post.createdAt
