@@ -170,7 +170,54 @@ export default function AdminView() {
                   </Card.Text>
 
                   <Card.Text className="mb-1 text-dark small pb-3">
-                    <strong>Comments:</strong> {Array.isArray(post.comments) ? post.comments.length : 0}
+                    <strong>Comments:</strong>
+                    {Array.isArray(post.comments) && post.comments.length > 0 ? (
+                      post.comments
+                        .slice()
+                        .sort((a, b) => {
+                          const getTime = (item) =>
+                            item.createdAt
+                              ? new Date(item.createdAt).getTime()
+                              : item._id
+                              ? parseInt(item._id.substring(0, 8), 16) * 1000
+                              : 0;
+                          return getTime(b) - getTime(a);
+                        })
+                        .slice(0, 2) // top 2 comments
+                        .map((c, index) => {
+                          const commentDate =
+                            c.createdAt
+                              ? new Date(c.createdAt)
+                              : c._id
+                              ? new Date(parseInt(c._id.substring(0, 8), 16) * 1000)
+                              : null;
+
+                          return (
+                            <div
+                              key={c._id || index}
+                              className="d-flex justify-content-between align-items-start mt-1"
+                            >
+                              <span style={{ display: 'flex', gap: '4px', alignItems: 'flex-start' }}>
+                                <span>•</span>
+                                <span>{c.comment || 'No content'}</span>
+                              </span>
+                              <small className="text-muted" style={{ fontSize: '0.75rem', marginLeft: '8px' }}>
+                                {commentDate
+                                  ? commentDate.toLocaleString(undefined, {
+                                      year: 'numeric',
+                                      month: 'short',
+                                      day: 'numeric',
+                                      hour: '2-digit',
+                                      minute: '2-digit',
+                                    })
+                                  : 'No date'}
+                              </small>
+                            </div>
+                          );
+                        })
+                    ) : (
+                      <div className="text-muted mt-1">No comments yet.</div>
+                    )}
                   </Card.Text>
 
                   <div className="mt-auto">
@@ -180,7 +227,7 @@ export default function AdminView() {
                       style={{ borderRadius: '0' }}
                       onClick={() => handleViewPost(post._id || post.id)}
                     >
-                      Read More
+                      Read more
                     </Button>
                   </div>
                 </Card.Body>

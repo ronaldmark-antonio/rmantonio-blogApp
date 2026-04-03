@@ -271,60 +271,65 @@ export default function ViewPost() {
                 : 'Unknown'}
             </Card.Text>
 
-            <div className="mb-3">
-              <strong>Comments:</strong>
-                {comments.length > 0 ? (
-                <ListGroup
-                  variant="flush"
-                  style={{
-                    maxHeight: '300px',
-                    overflowY: 'auto',
-                    marginTop: '8px',
-                  }}
-                >
-                  {comments
-                    .slice()
-                    .sort((a, b) => {
-                      const timeA = a.createdAt
-                        ? new Date(a.createdAt).getTime()
-                        : parseInt(a._id?.substring(0, 8), 16) * 1000;
-                      const timeB = b.createdAt
-                        ? new Date(b.createdAt).getTime()
-                        : parseInt(b._id?.substring(0, 8), 16) * 1000;
-                      return timeB - timeA; // newest first
-                    })
-                    .map((c, index) => {
-                      const commentDate = c.createdAt
-                        ? new Date(c.createdAt)
-                        : new Date(parseInt(c._id?.substring(0, 8), 16) * 1000);
+<div className="mb-3">
+  <strong>Comments:</strong>
+  {comments.length > 0 ? (
+    <ListGroup
+      variant="flush"
+      style={{
+        maxHeight: '400px',
+        overflowY: 'auto',
+        marginTop: '8px',
+      }}
+    >
+      {comments
+        .slice() // copy array
+        .sort((a, b) => {
+          // Sort newest first
+          const timeA = a.createdAt ? new Date(a.createdAt).getTime() : parseInt(a._id?.substring(0, 8), 16) * 1000;
+          const timeB = b.createdAt ? new Date(b.createdAt).getTime() : parseInt(b._id?.substring(0, 8), 16) * 1000;
+          return timeB - timeA;
+        })
+        .map((c, index) => {
+          const commentDate = c.createdAt
+            ? new Date(c.createdAt)
+            : new Date(parseInt(c._id?.substring(0, 8), 16) * 1000);
 
-                      return (
-                        <ListGroup.Item key={c._id || index}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <span>{c?.comment || 'No content available'}</span>
-                            <small className="text-muted">
-                              {commentDate.toLocaleString()}
-                            </small>
-                          </div>
+          const formattedDate = commentDate.toLocaleString(undefined, {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          });
 
-                          {isAdmin && (
-                            <Button
-                              variant="danger"
-                              className="ms-2 float-end mt-2"
-                              style={{ borderRadius: '0' }}
-                              onClick={() => handleDeleteComment(c._id)}
-                            >
-                              Delete
-                            </Button>
-                          )}
-                        </ListGroup.Item>
-                      );
-                    })}
-                </ListGroup>
-                ) : (
-                  <p className="text-muted">No comments yet.</p>
-                )}
-            </div>
+          return (
+            <ListGroup.Item key={c._id || index}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span>• {c.comment || 'No content'}</span>
+
+                <span style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                  <small className="text-muted">{formattedDate}</small>
+                  {isAdmin && (
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      style={{ borderRadius: '0', padding: '2px 6px' }}
+                      onClick={() => handleDeleteComment(c._id)}
+                    >
+                      Delete
+                    </Button>
+                  )}
+                </span>
+              </div>
+            </ListGroup.Item>
+          );
+        })}
+    </ListGroup>
+  ) : (
+    <p className="text-muted">No comments yet.</p>
+  )}
+</div>
 
             {!isAdmin && (
               <Form onSubmit={handleCommentSubmit}>
