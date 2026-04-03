@@ -15,6 +15,7 @@ export default function ViewPost() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false); 
   const token = localStorage.getItem('token');
+  const isCommentValid = newComment.trim() !== '';
 
   const notyf = new Notyf({
     duration: 3000,
@@ -143,7 +144,7 @@ export default function ViewPost() {
 
     setNewComment('');
 
-    notyf.success('Comment added successfully');
+    notyf.success('Comment submitted successfully');
 
     try {
       const res = await fetch(
@@ -326,12 +327,16 @@ export default function ViewPost() {
                     </Button>
                   )}
                   <Button
-                  variant="dark"
-                  type="submit"
-                  disabled={isSubmitting}
-                  style={{ borderRadius: '0' }} 
+                    variant="dark"
+                    type="submit"
+                    disabled={!isCommentValid || isSubmitting}
+                    style={{
+                      borderRadius: '0',
+                      opacity: isCommentValid && !isSubmitting ? 1 : 0.5,
+                      cursor: isCommentValid && !isSubmitting ? 'pointer' : 'not-allowed'
+                    }}
                   >
-                  {isSubmitting ? 'Submitting...' : 'Submit'}
+                    {isSubmitting ? 'Submitting...' : 'Submit'}
                   </Button>
 
                 </div>

@@ -39,7 +39,7 @@ export default function Login() {
         const token = data.access;
 
         localStorage.setItem('token', token);
-        notyf.success('Login successful');
+        notyf.success('Login successfully');
 
         const userData = await retrieveUserDetails(token);
 
